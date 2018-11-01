@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import *
 
@@ -35,3 +35,21 @@ def id_check(request):
     else:
         res = {'id':id, 'msg':'가입불가'}
         return JsonResponse(res)
+
+def login(request):
+    if request.method == 'GET':
+
+        return render(request, 'app/login.html',{})
+
+    else:
+        id = request.POST['id']
+        pw = request.POST['pw']
+
+        try:
+            Member.objects.get(id=id, pw=pw)
+        except Member.DoesNotExist:
+            return redirect('login')
+
+        else:
+            request.session['id']=id
+            return redirect('/app/index')
