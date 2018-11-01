@@ -1,0 +1,30 @@
+<form action = "" method="post">
+    {% csrf_token %}
+    아이디 : <input type="text" name="id"><br>
+    <input type="button" value="중복확인" onclick="id_check()">
+    비밀번호 : <input type="password" name="pw"><br>
+    이름 : <input type="text" name="name"><br>
+    <input type="submit">
+</form>
+
+{% load static %}
+<script src="{% static 'app/js/jquery.min.js' %}"></script>
+
+<script>
+    function id_check(){
+        id = $('input[name=id]').val()
+        ct = $('input[name=csrfmiddlewaretoken]').val()
+        $.ajax({
+            // url: '/lotto/id_check',
+            url: '{% url 'id_check' %}',
+            type: 'post',
+            data: {'id':id,
+            'csrfmiddlewaretoken' : ct
+            },
+            success: function(res) {
+                alert(res.msg + res.id)
+
+         }
+     })
+    }
+</script>
